@@ -57,7 +57,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/file_list1"
+        android:id="@+id/file_list"
         android:layout_width="395dp"
         android:layout_height="480dp"
         android:layout_margin="22dp"

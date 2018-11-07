@@ -22,10 +22,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Log.d(TAG, "onCreate: started");
 
-        fetchFiles();
+
        initFilterSpeed();
+       initFilterDisplay();
+
+       //setContentView(R.layout.book_files);
+       //fetchFiles();
     }
 
 
@@ -47,6 +52,18 @@ public class MainActivity extends AppCompatActivity {
         mTitles.add("five");
         mImages.add("@android:drawable/ic_menu_sort_by_size");
 
+        mTitles.add("six");
+        mImages.add("@android:drawable/ic_menu_sort_by_size");
+
+        mTitles.add("seven");
+        mImages.add("@android:drawable/ic_menu_sort_by_size");
+
+        mTitles.add("eight");
+        mImages.add("@android:drawable/ic_menu_sort_by_size");
+
+        mTitles.add("nine");
+        mImages.add("@android:drawable/ic_menu_sort_by_size");
+
         initRecyclerView();
     }
 
@@ -61,5 +78,9 @@ public class MainActivity extends AppCompatActivity {
     private void initFilterSpeed(){
         EditText wordSpeed = findViewById(R.id.words_per_minute);
         wordSpeed.setFilters(new InputFilter[]{new InputFilterMinMax("1", "600")});
+    }
+    private void initFilterDisplay(){
+        EditText wordDisplay = findViewById(R.id.words_per_display);
+        wordDisplay.setFilters(new InputFilter[]{new InputFilterMinMax("1", "4")});
     }
 }

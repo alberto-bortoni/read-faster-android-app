@@ -22,4 +22,6 @@
     <string name="words_per_minute">WORDS PER MINUTE</string>
     <string name="words_per_display">WORDS PER DISPLAY</string>
     <string name="_400">400</string>
+    <string name="_1_600">1~600</string>
+    <string name="_1_4">1~4</string>
 </resources>
