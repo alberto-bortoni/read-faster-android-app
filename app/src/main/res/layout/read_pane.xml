@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/b_play"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="@string/play"
+        app:layout_constraintBottom_toTopOf="@+id/b_next_p"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_media_play" />
+
+    <ImageView
+        android:id="@+id/b_pause"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="@string/pause"
+        app:layout_constraintBottom_toTopOf="@+id/b_prev_p"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_media_pause" />
+
+    <ImageView
+        android:id="@+id/b_prev_p"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="@string/prev_paragraph"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_media_previous" />
+
+    <ImageView
+        android:id="@+id/b_next_p"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="@string/next_paragraph"
+        app:layout_constraintBottom_toBottomOf="@+id/b_next_s"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/b_next_s"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@android:drawable/ic_media_next" />
+
+    <ImageView
+        android:id="@+id/b_prev_s"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="23dp"
+        android:contentDescription="@string/prev_sentence"
+        app:layout_constraintBottom_toBottomOf="@+id/b_prev_p"
+        app:layout_constraintStart_toEndOf="@+id/b_prev_p"
+        app:layout_constraintTop_toTopOf="@+id/b_prev_p"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@android:drawable/ic_media_rew" />
+
+    <ImageView
+        android:id="@+id/b_next_s"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="23dp"
+        android:contentDescription="@string/next_sentence"
+        app:layout_constraintBottom_toBottomOf="@+id/b_prev_s"
+        app:layout_constraintEnd_toStartOf="@+id/b_next_p"
+        app:layout_constraintTop_toTopOf="@+id/b_prev_s"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@android:drawable/ic_media_ff" />
+
+    <TextView
+        android:id="@+id/curr_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="220dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/ready_player_one"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/id_book"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="11dp"
+        android:text="@string/the_book"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/id_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="11dp"
+        android:text="@string/_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

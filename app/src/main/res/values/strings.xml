@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">read-faster</string>
+    <string name="add_file">ADD FILE</string>
+    <string name="delete_file">DELETE FILE</string>
+    <string name="select">SELECT</string>
+
+    <string name="instructions">INSTRUCTIONS</string>
+    <string name="my_files">MY FILES</string>
+    <string name="go_read">GO READ</string>
+    <string name="currently_reading">CURRENTLY READING</string>
+    <string name="def">default</string>
+    <string name="play">play</string>
+    <string name="pause">pause</string>
+    <string name="next_paragraph">next_paragraph</string>
+    <string name="prev_paragraph">prev_paragraph</string>
+    <string name="prev_sentence">prev_sentence</string>
+    <string name="next_sentence">next_sentence</string>
+    <string name="ready_player_one">Ready Player One</string>
+    <string name="the_book">The book</string>
+    <string name="_1">1%</string>
+    <string name="read_me">read_me</string>
+    <string name="words_per_minute">WORDS PER MINUTE</string>
+    <string name="words_per_display">WORDS PER DISPLAY</string>
+    <string name="_400">400</string>
+</resources>
