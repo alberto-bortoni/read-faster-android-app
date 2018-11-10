@@ -1,80 +1,93 @@
 package bortoni.mx.read_faster;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
+///////////////////////////////////////////////////////////////////
+//                      MAIN ACTIVITY CLASS                      //
+//---------------------------------------------------------------//
+    //--------init class variables--------//
     private static final String TAG = "MainActivity";
+    public static final String EXTRA_WORDSPERMIN = "bortoni.mx.read_faster.EXTRA_WORDSPERMIN";
+    public static final String EXTRA_WORDSPERDIPS = "bortoni.mx.read_faster.EXTRA_WORDSPERDIPS";
 
-    //variables
-    private ArrayList<String> mTitles = new ArrayList<>();
-    private ArrayList<String> mImages = new ArrayList<>();
-
-
+    //--------init layout context--------//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Log.d(TAG, "onCreate: started");
 
+     //--------init layout context--------//
+     //--------instructions
+        Button instructions = (Button) findViewById(R.id.b_instr);
+        instructions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openInstructions();
+            }
+        });
 
-       initFilterSpeed();
-       initFilterDisplay();
+     //--------my files
+        Button myFiles = (Button) findViewById(R.id.b_files);
+        myFiles.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openBookFiles();
+            }
+        });
 
-       //setContentView(R.layout.book_files);
-       //fetchFiles();
+     //--------go read
+        Button goRead = (Button) findViewById(R.id.b_read);
+        goRead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openReadPane();
+            }
+        });
+
+     //--------filters
+        initFilterSpeed();
+        initFilterDisplay();
+
     }
 
 
 ///////////////////////////////////////////////////////////////////
-    private void fetchFiles(){
-        Log.d(TAG, "fetchFiles: retrieving flies");
-        mTitles.add("one");
-        mImages.add("@android:drawable/ic_menu_sort_by_size");
+//                      OTHER FUNCTIONS                          //
+//---------------------------------------------------------------//
 
-        mTitles.add("two");
-        mImages.add("@android:drawable/ic_menu_sort_by_size");
-
-        mTitles.add("three");
-        mImages.add("@android:drawable/ic_menu_sort_by_size");
-
-        mTitles.add("four");
-        mImages.add("@android:drawable/ic_menu_sort_by_size");
-
-        mTitles.add("five");
-        mImages.add("@android:drawable/ic_menu_sort_by_size");
-
-        mTitles.add("six");
-        mImages.add("@android:drawable/ic_menu_sort_by_size");
-
-        mTitles.add("seven");
-        mImages.add("@android:drawable/ic_menu_sort_by_size");
-
-        mTitles.add("eight");
-        mImages.add("@android:drawable/ic_menu_sort_by_size");
-
-        mTitles.add("nine");
-        mImages.add("@android:drawable/ic_menu_sort_by_size");
-
-        initRecyclerView();
+    //--------switch to activities--------//
+    public void openInstructions(){
+        Intent intent = new Intent(this, instructions.class);
+        startActivity(intent);
     }
 
-    private void initRecyclerView(){
-        Log.d(TAG, "initRecyclerView: init RV");
-        RecyclerView recyclerView = findViewById(R.id.file_list);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mImages, mTitles);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    public void openBookFiles(){
+        Intent intent = new Intent(this, bookFiles.class);
+        startActivity(intent);
     }
 
+    public void openReadPane(){
+        EditText wordsPerMinute = (EditText) findViewById(R.id.words_per_minute);
+        int intWordsPerMinute = Integer.parseInt(wordsPerMinute.getText().toString());
+        EditText wordsPerDisplay = (EditText) findViewById(R.id.words_per_display);
+        int intWordsPerDisplay = Integer.parseInt(wordsPerDisplay.getText().toString());
+
+        Intent intent = new Intent(this, readPane.class);
+        intent.putExtra(EXTRA_WORDSPERMIN, intWordsPerMinute);
+        intent.putExtra(EXTRA_WORDSPERDIPS, intWordsPerDisplay);
+        startActivity(intent);
+    }
+
+    //--------extra functions--------//
     private void initFilterSpeed(){
         EditText wordSpeed = findViewById(R.id.words_per_minute);
         wordSpeed.setFilters(new InputFilter[]{new InputFilterMinMax("1", "600")});
