@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".readPane">
 
-    <ImageView
+
+    <ImageButton
         android:id="@+id/b_play"
         android:layout_width="70dp"
         android:layout_height="70dp"
@@ -17,18 +18,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_media_play" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/b_pause"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="20dp"
+        android:clickable="true"
         android:contentDescription="@string/pause"
         app:layout_constraintBottom_toTopOf="@+id/b_prev_p"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_media_pause" />
+        app:srcCompat="@android:drawable/ic_media_pause"
+        android:focusable="true" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/b_prev_p"
         android:layout_width="70dp"
         android:layout_height="70dp"
@@ -39,7 +42,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_media_previous" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/b_next_p"
         android:layout_width="70dp"
         android:layout_height="70dp"
@@ -52,7 +55,7 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@android:drawable/ic_media_next" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/b_prev_s"
         android:layout_width="70dp"
         android:layout_height="70dp"
@@ -64,7 +67,7 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@android:drawable/ic_media_rew" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/b_next_s"
         android:layout_width="70dp"
         android:layout_height="70dp"
@@ -110,5 +113,7 @@
         android:text="@string/_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 
 </android.support.constraint.ConstraintLayout>

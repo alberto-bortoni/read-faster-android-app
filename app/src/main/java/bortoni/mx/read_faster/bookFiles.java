@@ -14,42 +14,56 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-
 
 public class bookFiles extends AppCompatActivity {
 
-    //public static File bookFiles = Environment.getExternalStoragePublicDirectory(En)
-    //public AssetManager bookAssets = getApplicationContext().getAssets();
 
     private static final String TAG = "bookFiles";
+    private static final String BOOK_DIR = "bookFilesDir";
+    private File bookDir = new File("");
+    private File targetBook = new File("");
 
-    //--------init class variables--------//
+    //--------init class variables and construct--------//
     private ArrayList<String> mTitles = new ArrayList<>();
     private ArrayList<String> mImages = new ArrayList<>();
-    //File bookDir = getDir("bookFileDir", MODE_PRIVATE);
 
 
+    public bookFiles(){
+
+    }
+
+    //--------sets and gets--------//
+    public void setTargetBook(String fileName){
+        targetBook = new File(bookDir.getAbsolutePath(), fileName);
+    }
+
+    public void setBookDir(){
+        bookDir = getDir(BOOK_DIR,0);
+    }
+
+    public File getTargetBook(){
+        return targetBook.getAbsoluteFile();
+    }
+
+    public File getBookDir(){
+        return bookDir.getAbsoluteFile();
+    }
 
 
-    //Field[] bookFiles = R.raw.class.getFields();
-    //File rawDir = new File(R.raw.class);
-
-
+    //--------on create--------//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     //--------init layout context--------//
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_files);
         Log.i(TAG, "onCreate: Started bookfiles");
-        //Log.i(TAG, "file location: " + bookDir.getAbsolutePath());
-
 
         //--------get files
+        setBookDir();
         copyAssets(); //TODO -- this copies the files every time
+        setTargetBook("second");
         fetchFiles();
-        initRecyclerView();
 
         //--------buttons
         Button addFile = (Button) findViewById(R.id.b_add);
@@ -64,7 +78,8 @@ public class bookFiles extends AppCompatActivity {
         deleteFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteBookFile();
+                //deleteBookFile();
+                
             }
         });
 
@@ -78,41 +93,24 @@ public class bookFiles extends AppCompatActivity {
 
     }
 
+
+
+
 ///////////////////////////////////////////////////////////////////
 //                      OTHER FUNCTIONS                          //
 //---------------------------------------------------------------//
 
     //--------switch to activities--------//
     private void fetchFiles(){
-        Log.d(TAG, "fetchFiles: retrieving flies");
+        Log.d(TAG, "fetchFiles: retrieving flies from " + getBookDir().getPath());
+        String[] files = getBookDir().list();
 
-        //File bookFilesa = new File("android.resource://" + getPackageName() + "/" + R.raw.class.getName());
-        //File[] bookFiles = getExternalFilesDir(null);
-
-        Field[] bookFiles = R.raw.class.getFields();
-
-        mTitles.add(bookFiles[0].getName());
-        mImages.add("@android:drawable/ic_menu_sort_by_size");
-
-        mTitles.add(bookFiles[1].getName());
-        mImages.add("@android:drawable/ic_menu_sort_by_size");
-
-        mTitles.add(bookFiles[2].getName());
-        mImages.add("@android:drawable/ic_menu_sort_by_size");
-
-        mTitles.add(getExternalFilesDir(null).getPath());
-        mImages.add("@android:drawable/ic_menu_sort_by_size");
-
-        String[] what = new String[0];
-        try {
-            what = getApplicationContext().getAssets().list("");
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (String filenames : files){
+            mTitles.add(filenames);
+            mImages.add("@android:drawable/ic_menu_sort_by_size");
         }
-        mTitles.add(what[0]);
-        mImages.add("@android:drawable/ic_menu_sort_by_size");
-        
 
+        initRecyclerView();
     }
 
     private void initRecyclerView(){
@@ -129,8 +127,10 @@ public class bookFiles extends AppCompatActivity {
 
     }
 
-    private void deleteBookFile(){
-
+    private void deleteBookFile(String file){
+        File deleteFile = new File(getBookDir().getPath(), file);
+        Log.d(TAG, "deleted file: " + deleteFile.getAbsolutePath());
+        deleteFile.delete();
     }
 
     private void selectTargetFile(){
@@ -138,10 +138,12 @@ public class bookFiles extends AppCompatActivity {
     }
 
 
-//TODO -- is storing in the sd card appropiate? do internal memory
+
+//TODO -- i think it is storingthe data in the right spot
     private void copyAssets() {
         AssetManager bookAssets = getApplicationContext().getAssets();
         String[] files = null;
+        File location = getBookDir();
         Log.i("tag", "copyAssets: started");
         try {
             files = bookAssets.list("");
@@ -154,7 +156,8 @@ public class bookFiles extends AppCompatActivity {
             OutputStream out = null;
             try {
                 in = bookAssets.open(filename);
-                File outFile = new File(getExternalFilesDir(null), filename);
+                //File outFile = new File(getFilesDir(), filename);
+                File outFile = new File(location, filename);
                 out = new FileOutputStream(outFile);
                 copyFile(in, out);
                 Log.i("tag", "success copy location " + outFile.getAbsolutePath());
@@ -174,7 +177,6 @@ public class bookFiles extends AppCompatActivity {
             }//finally
         }//if-for
     }
-
     private void copyFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[1024];
         int read;
@@ -182,6 +184,5 @@ public class bookFiles extends AppCompatActivity {
             out.write(buffer, 0, read);
         }
     }
-
 
 }//EOF
