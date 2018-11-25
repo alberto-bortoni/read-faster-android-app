@@ -55,11 +55,11 @@
         android:layout_marginBottom="20dp"
         android:text="@string/currently_reading"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintBottom_toTopOf="@+id/t_currently_read"
+        app:layout_constraintBottom_toTopOf="@+id/t_current_read"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/t_currently_read"
+        android:id="@+id/t_current_read"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"

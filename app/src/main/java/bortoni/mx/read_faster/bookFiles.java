@@ -1,6 +1,5 @@
 package bortoni.mx.read_faster;
 
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,14 +9,12 @@ import android.view.View;
 import android.widget.Button;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class bookFiles extends AppCompatActivity {
-
+///////////////////////////////////////////////////////////////////
+//                       CLASS VARIABLES                         //
+//---------------------------------------------------------------//
 
     private static final String TAG = "bookFiles";
     private static final String BOOK_DIR = "bookFilesDir";
@@ -28,14 +25,17 @@ public class bookFiles extends AppCompatActivity {
     private ArrayList<String> mTitles = new ArrayList<>();
     private ArrayList<String> mImages = new ArrayList<>();
 
-
+///////////////////////////////////////////////////////////////////
+//                CONSTRUCT, SETS, AND GETS                      //
+//---------------------------------------------------------------//
     public bookFiles(){
 
     }
 
     //--------sets and gets--------//
     public void setTargetBook(String fileName){
-        targetBook = new File(bookDir.getAbsolutePath(), fileName);
+        targetBook = new File(bookDir.getAbsolutePath(), fileName); //TODO -- hardcoded
+        Log.d(TAG, "setTargetBook: and the book is "+targetBook.getPath());
     }
 
     public void setBookDir(){
@@ -46,26 +46,88 @@ public class bookFiles extends AppCompatActivity {
         return targetBook.getAbsoluteFile();
     }
 
+    public String getTargetBookName(){
+        Log.d(TAG, "getTargetBookName: " + targetBook.getName());
+        return targetBook.getName();
+    }
+
     public File getBookDir(){
         return bookDir.getAbsoluteFile();
     }
 
 
+///////////////////////////////////////////////////////////////////
+//                     ACTIVITY WORKFLOW                         //
+//---------------------------------------------------------------//
     //--------on create--------//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     //--------init layout context--------//
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_files);
-        Log.i(TAG, "onCreate: Started bookfiles");
+        Log.i(TAG, "onCreate: Started bookFiles");
+
+        //--------init global Variables--------//
+        myGlobalVars globalVars = (myGlobalVars) getApplicationContext();
 
         //--------get files
-        setBookDir();
-        copyAssets(); //TODO -- this copies the files every time
-        setTargetBook("second");
+        //TODO -- this probably does not belong here
         fetchFiles();
 
         //--------buttons
+        initLayout();
+
+    }
+
+    //--------on start--------//
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: started activity");
+    }
+
+    //--------on resume--------//
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: resumed activity");
+    }
+
+    //--------on pause--------//
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: activity paused");
+    }
+
+    //--------on stop--------//
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: activity stoped");
+    }
+
+    //--------on restart--------//
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: activity restarted");
+    }
+
+    //--------on destroy--------//
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: destroy activity");
+    }
+
+
+///////////////////////////////////////////////////////////////////
+//                      OTHER FUNCTIONS                          //
+//---------------------------------------------------------------//
+
+    //--------switch to activities--------//
+    private void initLayout() {
         Button addFile = (Button) findViewById(R.id.b_add);
         addFile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,8 +140,7 @@ public class bookFiles extends AppCompatActivity {
         deleteFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //deleteBookFile();
-                
+                deleteBookFile();
             }
         });
 
@@ -90,21 +151,15 @@ public class bookFiles extends AppCompatActivity {
                 selectTargetFile();
             }
         });
-
     }
 
-
-
-
-///////////////////////////////////////////////////////////////////
-//                      OTHER FUNCTIONS                          //
-//---------------------------------------------------------------//
-
-    //--------switch to activities--------//
     private void fetchFiles(){
-        Log.d(TAG, "fetchFiles: retrieving flies from " + getBookDir().getPath());
-        String[] files = getBookDir().list();
+        myGlobalVars globalVars = (myGlobalVars) getApplicationContext();
 
+        Log.d(TAG, "fetchFiles: retrieving flies from " + globalVars.getBookDirectory().getPath());
+        String[] files = globalVars.getBookDirectory().list();
+            mTitles.clear();
+            mImages.clear();
         for (String filenames : files){
             mTitles.add(filenames);
             mImages.add("@android:drawable/ic_menu_sort_by_size");
@@ -121,68 +176,22 @@ public class bookFiles extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+
     //--------button services--------//
 
     private void addBookFile(){
 
     }
 
-    private void deleteBookFile(String file){
-        File deleteFile = new File(getBookDir().getPath(), file);
+    private void deleteBookFile(){
+/*        File deleteFile = new File(getBookDir().getPath(), file);
         Log.d(TAG, "deleted file: " + deleteFile.getAbsolutePath());
-        deleteFile.delete();
+        deleteFile.delete();*/
     }
 
     private void selectTargetFile(){
 
     }
 
-
-
-//TODO -- i think it is storingthe data in the right spot
-    private void copyAssets() {
-        AssetManager bookAssets = getApplicationContext().getAssets();
-        String[] files = null;
-        File location = getBookDir();
-        Log.i("tag", "copyAssets: started");
-        try {
-            files = bookAssets.list("");
-        }
-        catch (IOException e) {
-            Log.e("tag", "Failed to get asset file list.", e);
-        }
-        if (files != null) for (String filename : files) {
-            InputStream in = null;
-            OutputStream out = null;
-            try {
-                in = bookAssets.open(filename);
-                //File outFile = new File(getFilesDir(), filename);
-                File outFile = new File(location, filename);
-                out = new FileOutputStream(outFile);
-                copyFile(in, out);
-                Log.i("tag", "success copy location " + outFile.getAbsolutePath());
-            }
-            catch(IOException e) {
-                Log.e("tag", "Failed to copy asset file: " + filename, e);
-            }
-            finally {
-                if (in != null) {
-                    try {in.close(); Log.i("tag", "closed file in:" + filename);}
-                    catch (IOException e) {Log.e("tag", "CANT CLOSE IN FILE");}
-                }
-                if (out != null) {
-                    try {out.close(); Log.i("tag", "closed file out:" + filename);}
-                    catch (IOException e) {Log.e("tag", "CANT CLOSE OUT FILE");}
-                }
-            }//finally
-        }//if-for
-    }
-    private void copyFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        while((read = in.read(buffer)) != -1){
-            out.write(buffer, 0, read);
-        }
-    }
 
 }//EOF

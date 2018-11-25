@@ -2,39 +2,122 @@ package bortoni.mx.read_faster;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-//public class MainActivity extends AppCompatActivity {
 public class MainActivity extends Activity {
 ///////////////////////////////////////////////////////////////////
-//                      MAIN ACTIVITY CLASS                      //
+//                       CLASS VARIABLES                         //
 //---------------------------------------------------------------//
-    //--------init class variables--------//
-    private static final String TAG = "MainActivity";
-    public static final String EXTRA_WORDSPERMIN = "bortoni.mx.read_faster.EXTRA_WORDSPERMIN";
-    public static final String EXTRA_WORDSPERDIPS = "bortoni.mx.read_faster.EXTRA_WORDSPERDIPS";
-    public bookFiles myBooks;
 
-    //--------init layout context--------//
+    private static final String TAG = "MainActivity";
+
+
+///////////////////////////////////////////////////////////////////
+//                     ACTIVITY WORKFLOW                         //
+//---------------------------------------------------------------//
+    //--------on create--------//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "onCreate: started");
+        Log.d(TAG, "onCreate: Started Main Activity");
+        copyAssets();
 
-    //--------init book content--------//
-        File tmp = new File("");
+     //--------init global Variables--------//
+        myGlobalVars globalVars = (myGlobalVars) getApplicationContext();
+        globalVars.setProgPc(5.0);
+        globalVars.setSpeed(400);
+        globalVars.setWordDisplay(2);
 
+        initLayout();
 
-     //--------init layout context--------//
-     //--------instructions
+    }
+
+    //--------on start--------//
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: started activity");
+    }
+
+    //--------on resume--------//
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: resumed activity");
+        //TODO -- speed and display should not keep their val at activity level but with global
+
+    }
+
+    //--------on pause--------//
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: activity paused");
+
+        myGlobalVars globalVars = (myGlobalVars) getApplicationContext();
+        EditText wordsPerMinute = (EditText) findViewById(R.id.words_per_minute);
+        EditText wordsPerDisplay = (EditText) findViewById(R.id.words_per_display);
+
+        try{
+            globalVars.setWordDisplay(Integer.parseInt(wordsPerDisplay.getText().toString()));
+        }catch(NumberFormatException e){
+            globalVars.setWordDisplay(2);
+            Log.d(TAG, "openReadPane: default to value 1, no user input");
+        }
+
+        try{
+            globalVars.setSpeed(Integer.parseInt(wordsPerMinute.getText().toString()));
+        }catch(NumberFormatException e){
+            globalVars.setSpeed(400);
+            Log.d(TAG, "openReadPane: default to value 400, no user input");
+        }
+
+    }
+
+    //--------on stop--------//
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: activity stoped");
+    }
+
+    //--------on restart--------//
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: activity restarted");
+    }
+
+    //--------on destroy--------//
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: destroy activity");
+    }
+
+///////////////////////////////////////////////////////////////////
+//                      OTHER FUNCTIONS                          //
+//---------------------------------------------------------------//
+
+    private void initLayout() {
+
+        myGlobalVars globalVars = (myGlobalVars) getApplicationContext();
+
+        //--------instructions
         Button instructions = (Button) findViewById(R.id.b_instr);
         instructions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +126,7 @@ public class MainActivity extends Activity {
             }
         });
 
-     //--------my files
+        //--------my files
         Button myFiles = (Button) findViewById(R.id.b_files);
         myFiles.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +135,7 @@ public class MainActivity extends Activity {
             }
         });
 
-     //--------go read
+        //--------go read
         Button goRead = (Button) findViewById(R.id.b_read);
         goRead.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,16 +144,16 @@ public class MainActivity extends Activity {
             }
         });
 
-     //--------filters
-        initFilterSpeed();
-        initFilterDisplay();
+        //--------edit text filters
+        EditText wordSpeed = findViewById(R.id.words_per_minute);
+        wordSpeed.setFilters(new InputFilter[]{new InputFilterMinMax("1", "600")});
 
+        EditText wordDisplay = findViewById(R.id.words_per_display);
+        wordDisplay.setFilters(new InputFilter[]{new InputFilterMinMax("1", "4")});
+
+        TextView currentRead = (TextView) findViewById(R.id.t_current_read);
+        currentRead.setText(globalVars.getTargetBookName());
     }
-
-
-///////////////////////////////////////////////////////////////////
-//                      OTHER FUNCTIONS                          //
-//---------------------------------------------------------------//
 
     //--------switch to activities--------//
     public void openInstructions(){
@@ -79,53 +162,25 @@ public class MainActivity extends Activity {
     }
 
     public void openBookFiles(){
-
         Intent intent = new Intent(this, bookFiles.class);
         startActivity(intent);
     }
 
     public void openReadPane(){
-        EditText wordsPerMinute = (EditText) findViewById(R.id.words_per_minute);
-        EditText wordsPerDisplay = (EditText) findViewById(R.id.words_per_display);
-        int intWordsPerDisplay;
-        int intWordsPerMinute;
-
-        try{
-            intWordsPerDisplay = Integer.parseInt(wordsPerDisplay.getText().toString());
-        }catch(NumberFormatException e){
-            intWordsPerDisplay = 1;
-            Log.d(TAG, "openReadPane: default to value 1, no user input");
-        }
-
-        try{
-            intWordsPerMinute = Integer.parseInt(wordsPerMinute.getText().toString());
-        }catch(NumberFormatException e){
-            intWordsPerMinute = 400;
-            Log.d(TAG, "openReadPane: default to value 400, no user input");
-        }
-
         Intent intent = new Intent(this, readPane.class);
-        intent.putExtra(EXTRA_WORDSPERMIN, intWordsPerMinute);
-        intent.putExtra(EXTRA_WORDSPERDIPS, intWordsPerDisplay);
         startActivity(intent);
     }
 
-    //--------extra functions--------//
-    private void initFilterSpeed(){
-        EditText wordSpeed = findViewById(R.id.words_per_minute);
-        wordSpeed.setFilters(new InputFilter[]{new InputFilterMinMax("1", "600")});
-    }
-    private void initFilterDisplay(){
-        EditText wordDisplay = findViewById(R.id.words_per_display);
-        wordDisplay.setFilters(new InputFilter[]{new InputFilterMinMax("1", "4")});
-    }
-
-/*
-
+    //TODO -- i think it is storingthe data in the right spot
     private void copyAssets() {
         AssetManager bookAssets = getApplicationContext().getAssets();
+        myGlobalVars globalVars = (myGlobalVars) getApplicationContext();
         String[] files = null;
+        File location = getDir(globalVars.getDirectoryName(),0);//getBookDir();
+        String[] copiedFiles = null;
         Log.i("tag", "copyAssets: started");
+
+
         try {
             files = bookAssets.list("");
         }
@@ -137,9 +192,7 @@ public class MainActivity extends Activity {
             OutputStream out = null;
             try {
                 in = bookAssets.open(filename);
-                //File outFile = new File(getExternalFilesDir(null), filename);
-                File outFile = new File(getFilesDir(), filename);
-                //File outFile = new File(bookDir.getAbsoluteFile(), filename);
+                File outFile = new File(location, filename);
                 out = new FileOutputStream(outFile);
                 copyFile(in, out);
                 Log.i("tag", "success copy location " + outFile.getAbsolutePath());
@@ -158,6 +211,11 @@ public class MainActivity extends Activity {
                 }
             }//finally
         }//if-for
+
+        copiedFiles = location.list();
+        globalVars.setBookDirectory(location);
+        globalVars.setTargetBookName(copiedFiles[1]);
+
     }
     private void copyFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[1024];
@@ -166,9 +224,5 @@ public class MainActivity extends Activity {
             out.write(buffer, 0, read);
         }
     }
-
-*/
-
-
 
 }
