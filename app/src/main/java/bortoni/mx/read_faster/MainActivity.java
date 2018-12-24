@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
 ///////////////////////////////////////////////////////////////////
 //                     ACTIVITY WORKFLOW                         //
 //---------------------------------------------------------------//
-    //--------on create--------//
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,14 +46,12 @@ public class MainActivity extends Activity {
 
     }
 
-    //--------on start--------//
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart: started activity");
     }
 
-    //--------on resume--------//
     @Override
     protected void onResume() {
         super.onResume();
@@ -62,12 +60,12 @@ public class MainActivity extends Activity {
 
     }
 
-    //--------on pause--------//
     @Override
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause: activity paused");
 
+        //gather the information on speed and words per display by the user
         myGlobalVars globalVars = (myGlobalVars) getApplicationContext();
         EditText wordsPerMinute = (EditText) findViewById(R.id.words_per_minute);
         EditText wordsPerDisplay = (EditText) findViewById(R.id.words_per_display);
@@ -88,21 +86,18 @@ public class MainActivity extends Activity {
 
     }
 
-    //--------on stop--------//
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "onStop: activity stoped");
     }
 
-    //--------on restart--------//
     @Override
     protected void onRestart() {
         super.onRestart();
         Log.d(TAG, "onRestart: activity restarted");
     }
 
-    //--------on destroy--------//
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -217,6 +212,7 @@ public class MainActivity extends Activity {
         globalVars.setTargetBookName(copiedFiles[1]);
 
     }
+
     private void copyFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[1024];
         int read;

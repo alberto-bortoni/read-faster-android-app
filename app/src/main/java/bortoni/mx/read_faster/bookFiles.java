@@ -59,7 +59,7 @@ public class bookFiles extends AppCompatActivity {
 ///////////////////////////////////////////////////////////////////
 //                     ACTIVITY WORKFLOW                         //
 //---------------------------------------------------------------//
-    //--------on create--------//
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     //--------init layout context--------//
@@ -79,42 +79,36 @@ public class bookFiles extends AppCompatActivity {
 
     }
 
-    //--------on start--------//
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart: started activity");
     }
 
-    //--------on resume--------//
     @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: resumed activity");
     }
 
-    //--------on pause--------//
     @Override
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause: activity paused");
     }
 
-    //--------on stop--------//
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "onStop: activity stoped");
     }
 
-    //--------on restart--------//
     @Override
     protected void onRestart() {
         super.onRestart();
         Log.d(TAG, "onRestart: activity restarted");
     }
 
-    //--------on destroy--------//
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -178,7 +172,6 @@ public class bookFiles extends AppCompatActivity {
 
 
     //--------button services--------//
-
     private void addBookFile(){
 
     }
